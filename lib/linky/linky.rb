@@ -1,7 +1,20 @@
 class Linky
   class << self
+    # Link a keyword to a target within some HTML. 
+    #   * keyword: what you want linked
+    #   * target: where you want it linked to
+    #   * html: the html you want to look for the keyword in
+    #   * options: any extra attributes (besides href) that you want on the link.
+    #
+    # Here's an example:
+    #
+    #     require 'linky'
+    #     html = "<p>link all occurances of the word "more."</p><div>some more text</div>"
+    #     Linky.link "more", "http://more.com", html, :class => "linky"
+    #     # returns "<p>link the word "<a href="http://more.com" class="linky">more</a>."</p><div>some <a href="http://more.com" class="linky">more</a> text</div>"
     def link(keyword, target, html, options={})
-      block = proc {|keyword| %{<a href="#{target}" #{options.map {|k,v| %{#{k}="#{v}"}}.join " "}>#{keyword}</a>}}
+      options = options.map {|k,v| %{#{k}="#{v}"}}.join " " 
+      block = proc {|keyword| %{<a href="#{target}" #{options}>#{keyword}</a>}}
       html_fragment = Nokogiri::HTML::DocumentFragment.parse html
       real_link keyword.to_s, html_fragment, &block
       html_fragment.to_html

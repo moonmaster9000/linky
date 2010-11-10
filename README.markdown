@@ -1,6 +1,6 @@
 # Linky
 
-A simple gem for safely linking keywords within HTML (i.e., it's more than a gsub). Built on top of Nokogiri. 
+A simple gem for safely linking keywords within HTML (i.e., it's more than a `gsub`). Built on top of Nokogiri. 
 
 ## Installation
 
