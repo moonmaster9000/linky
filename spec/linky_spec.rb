@@ -15,7 +15,7 @@ describe Linky, "#link" do
   end
 
   it "should link any keywords not already linked" do
-    new_html = Linky.link(@keyword, "http://link.to.somewhere", @html)
-    new_html.should == "<p>some html with <a href=\"http://link.to.somewhere\">keyword</a> and Keyword and <a href=\"#\">keyword</a></p>"
+    new_html = Linky.link(@keyword, "http://link.to.somewhere", @html, :class => "autolinked")
+    new_html.should == "<p>some html with <a href=\"http://link.to.somewhere\" class=\"autolinked\">keyword</a> and Keyword and <a href=\"#\">keyword</a></p>"
   end
 end
