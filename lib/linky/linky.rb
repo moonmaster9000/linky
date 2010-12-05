@@ -24,7 +24,7 @@ class Linky
     def real_link(needle, haystack, &block)
       # if we've drilled down all the way to a raw text node,
       # and it contains the needle we're looking for
-      if haystack.text? && (match = haystack.content.match(/^.*[\ \."'](#{needle})(?:[\ \."'].*)?$/i))
+      if haystack.text? && (match = haystack.content.match(/^.*?\b(#{needle})(?:\b.*)?$/i))
         
         # call the block to determine what we'll replace the needle with
         new_needle = block.call match[1]
@@ -38,15 +38,18 @@ class Linky
           haystack.next_sibling.add_next_sibling Nokogiri::HTML::DocumentFragment.parse(postfix)
           haystack.next_sibling.next_sibling.content = postfix
         end
+        true
       elsif haystack.name != "a" && haystack.respond_to?(:children)
+        found = false
         haystack.children.each do |child|
-          real_link needle, child, &block 
+          found = real_link needle, child, &block unless found
         end
+        found
       end
     end
 
     def break_on_boundary(boundary, string)
-      match = string.match /^(.*[\ \."'])(#{boundary})([\ \."'].*|)?$/
+      match = string.match /^(.*?\b)(#{boundary})(\b.*)?$/
       return match[1], match[2], match[3]
     end
   end
