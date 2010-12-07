@@ -24,4 +24,10 @@ describe Linky, "#link" do
     new_html = Linky.link "he", "#he", html
     new_html.should == "hi there, <a href=\"#he\">he</a> is funny and he is a he.<div>more he stuff.</div>"
   end
+
+  it "should not remove links" do
+    html = "<p>California <a href=\"topics/cabernet-sauvignon\">Cabernet Sauvignon</a></p>"
+    new_html = Linky.link "California", "topics/california", html
+    new_html.should == "<p><a href=\"topics/california\">California</a> <a href=\"topics/cabernet-sauvignon\">Cabernet Sauvignon</a></p>"
+  end
 end

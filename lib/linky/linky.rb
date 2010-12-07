@@ -28,15 +28,19 @@ class Linky
         
         # call the block to determine what we'll replace the needle with
         new_needle = block.call match[1]
+
+
        
         # break the string into three parts
         prefix, keyword, postfix = break_on_boundary match[1], haystack.to_s 
-        
+
         haystack.content = prefix
         haystack.add_next_sibling Nokogiri::HTML::DocumentFragment.parse(new_needle)
         if !postfix.nil? and !postfix.empty?
-          haystack.next_sibling.add_next_sibling Nokogiri::HTML::DocumentFragment.parse(postfix)
-          haystack.next_sibling.next_sibling.content = postfix
+          if postfix_content = Nokogiri::HTML::DocumentFragment.parse(postfix)
+            postfix_content.content = postfix
+            haystack.next_sibling.add_next_sibling postfix_content 
+          end
         end
         true
       elsif haystack.name != "a" && haystack.respond_to?(:children)
