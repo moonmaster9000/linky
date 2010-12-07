@@ -17,6 +17,7 @@ class Linky
       block = proc {|keyword| %{<a href="#{target}" #{options}>#{keyword}</a>}}
       html_fragment = Nokogiri::HTML::DocumentFragment.parse html
       real_link keyword.to_s, html_fragment, &block
+      raise "We lost some content in attempting to link it. Please report a bug" unless html_fragment.text == Nokogiri::HTML::DocumentFragment.parse(html).text 
       html_fragment.to_xhtml
     end
 

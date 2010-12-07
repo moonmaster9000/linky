@@ -30,4 +30,10 @@ describe Linky, "#link" do
     new_html = Linky.link "California", "topics/california", html
     new_html.should == "<p><a href=\"topics/california\">California</a> <a href=\"topics/cabernet-sauvignon\">Cabernet Sauvignon</a></p>"
   end
+
+  it "should preserve entities" do
+    html = "<p>California <a href=\"topics/cabernet-sauvignon\">Cabernet Sauvignon</a>&#151;an awesome wine</p>"
+    new_html = Linky.link "California", "topics/california", html
+    new_html.should == "<p><a href=\"topics/california\">California</a> <a href=\"topics/cabernet-sauvignon\">Cabernet Sauvignon</a>&#x97;an awesome wine</p>"
+  end
 end
