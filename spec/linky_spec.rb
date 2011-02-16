@@ -36,4 +36,10 @@ describe Linky, "#link" do
     new_html = Linky.link "California", "topics/california", html
     new_html.should == "<p><a href=\"topics/california\">California</a> <a href=\"topics/cabernet-sauvignon\">Cabernet Sauvignon</a>&#x97;an awesome wine</p>"
   end
+
+  it "should include text after next line char" do
+    html = %(Hi.\nI like ice cream. She likes it too.\n I think.)
+    new_html = Linky.link "cream", "topics/cream", html
+    new_html.should == %(Hi.\nI like ice <a href="topics/cream">cream</a>. She likes it too.\n I think.)
+  end
 end

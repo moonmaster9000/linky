@@ -54,8 +54,8 @@ class Linky
     end
 
     def break_on_boundary(boundary, string)
-      match = string.match /^(.*?\b)(#{boundary})(\b.*)?$/
-      return match[1], match[2], match[3]
+      match = string.match /\b(#{boundary})\b/
+      return $`, match[1], $'
     end
   end
 end
