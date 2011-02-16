@@ -33,7 +33,7 @@ class Linky
 
        
         # break the string into three parts
-        prefix, keyword, postfix = break_on_boundary match[1], haystack.to_s 
+        prefix, keyword, postfix = break_on_boundary match[1], haystack.text 
 
         haystack.content = prefix
         haystack.add_next_sibling Nokogiri::HTML::DocumentFragment.parse(new_needle)

@@ -42,4 +42,10 @@ describe Linky, "#link" do
     new_html = Linky.link "cream", "topics/cream", html
     new_html.should == %(Hi.\nI like ice <a href="topics/cream">cream</a>. She likes it too.\n I think.)
   end
+
+  it "should preserve html entity" do
+    html = "apple &amp; orange"
+    new_html = Linky.link "apple", "topics/apple", html
+    new_html.should == %(<a href="topics/apple">apple</a> &amp; orange)
+  end
 end
