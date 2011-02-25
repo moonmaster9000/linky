@@ -48,4 +48,11 @@ describe Linky, "#link" do
     new_html = Linky.link "apple", "topics/apple", html
     new_html.should == %(<a href="topics/apple">apple</a> &amp; orange)
   end
+
+  it "should process pre parsed html fragment object" do
+    html = "apple &amp; orange"
+    frag = Nokogiri::HTML::DocumentFragment.parse(html)
+    new_html = Linky.link "apple", "topics/apple", frag
+    new_html.should == %(<a href="topics/apple">apple</a> &amp; orange)
+  end
 end
