@@ -3,7 +3,7 @@ class Linky
     # Link a keyword to a target within some HTML. 
     #   * keyword: what you want linked
     #   * target: where you want it linked to
-    #   * html: the html you want to look for the keyword in
+    #   * html: the html you want to look for the keyword in, or Nokogiri::HTML::DocumentFragment object.
     #   * options: any extra attributes (besides href) that you want on the link.
     #
     # Here's an example:
@@ -12,12 +12,17 @@ class Linky
     #     html = "<p>link all occurances of the word "more."</p><div>some more text</div>"
     #     Linky.link "more", "http://more.com", html, :class => "linky"
     #     # returns "<p>link the word "<a href="http://more.com" class="linky">more</a>."</p><div>some <a href="http://more.com" class="linky">more</a> text</div>"
+    #
+    # if you provide parameter html as DocumentFragment object, after calling link(), that object is updated as well.
+    # Means the output of link(keyword, target, html) == html.to_xhtml
     def link(keyword, target, html, options={})
       options = options.map {|k,v| %{#{k}="#{v}"}}.join " " 
       block = proc {|keyword| %{<a href="#{target}" #{options}>#{keyword}</a>}}
-      html_fragment = Nokogiri::HTML::DocumentFragment.parse html
+      html_fragment = html.kind_of?(Nokogiri::HTML::DocumentFragment) ? html : Nokogiri::HTML::DocumentFragment.parse(html)
+      html_fragment_orig = html_fragment.dup
+
       real_link keyword.to_s, html_fragment, &block
-      raise "We lost some content in attempting to link it. Please report a bug" unless html_fragment.text == Nokogiri::HTML::DocumentFragment.parse(html).text 
+      raise "We lost some content in attempting to link it. Please report a bug" unless html_fragment.text == html_fragment_orig.text 
       html_fragment.to_xhtml
     end
 
